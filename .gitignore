@@ -1,0 +1,7 @@
+node_modules/
+.idea/
+.env
+.env.*
+npm-debug.log*
+playwright-report/
+test-results/

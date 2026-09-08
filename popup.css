@@ -1,0 +1,33 @@
+:root {
+    color-scheme: dark;
+    font-family: "Segoe UI", sans-serif;
+    color: #e0f3ec;
+    background: #17211f;
+}
+
+* { box-sizing: border-box; }
+body { width: 300px; margin: 0; }
+main { padding: 22px; background: radial-gradient(ellipse at top right, #2b423a, transparent 70%); }
+.eyebrow { margin: 0 0 6px; color: #a5c7b9; font-size: 12px; }
+h1 { margin: 0; font-size: 24px; font-weight: 650; }
+.description { margin: 12px 0 20px; font-size: 13px; line-height: 1.5; color: #bed2c9; }
+.controls { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+#state-label { font-size: 14px; }
+button {
+    min-width: 116px;
+    min-height: 40px;
+    padding: 9px 16px;
+    border: 1px solid #89bda6;
+    border-radius: 6px;
+    background: #b8e5d0;
+    color: #17211f;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 650;
+    cursor: pointer;
+}
+button[aria-checked="true"] { background: #263d34; color: #e0f3ec; }
+button:hover:not(:disabled) { border-color: #e0f3ec; }
+button:focus-visible { outline: 2px solid #e0f3ec; outline-offset: 3px; }
+button:disabled { opacity: .55; cursor: wait; }
+#hint { min-height: 32px; margin: 16px 0 0; font-size: 11px; line-height: 1.5; color: #a5c7b9; }

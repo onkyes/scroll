@@ -1,0 +1,57 @@
+<!doctype html>
+<style>
+  body { margin: 0; height: 0; overflow: hidden; }
+  ytd-shorts { display: block; position: relative; margin: 20px; width: 500px; }
+  #reels { height: 500px; overflow-y: auto; scroll-snap-type: y mandatory; }
+  ytd-reel-video-renderer { display: block; height: 500px; scroll-snap-align: start; }
+  video { display: block; width: 360px; height: 500px; }
+  #navigation-button-down { position: fixed; left: 550px; top: 200px; }
+</style>
+<button id="unrelated" aria-label="Next video">Unrelated player</button>
+<ytd-shorts>
+  <div id="reels">
+    <ytd-reel-video-renderer><video id="v0" aria-hidden="true" loop muted preload="auto" src="__MEDIA__"></video></ytd-reel-video-renderer>
+    <ytd-reel-video-renderer><video id="v1" loop muted preload="auto" src="__MEDIA__"></video></ytd-reel-video-renderer>
+    <ytd-reel-video-renderer><video id="v2" loop muted preload="auto" src="__MEDIA__"></video></ytd-reel-video-renderer>
+    <ytd-reel-video-renderer><video id="v3" loop muted preload="auto" src="__MEDIA__"></video></ytd-reel-video-renderer>
+  </div>
+  <div id="navigation-button-down"><button aria-label="Weiter">Next short</button></div>
+</ytd-shorts>
+<script>
+  const fixture = window.fixture = { clicks: 0, unrelated: 0, mode: "normal", index: 0 };
+  const reels = document.querySelector("#reels");
+  fixture.video = i => document.querySelector("#v" + i);
+  fixture.navigate = path => {
+    history.pushState({}, "", path);
+    document.dispatchEvent(new Event("yt-navigate-finish"));
+  };
+  fixture.select = index => {
+    fixture.video(fixture.index).pause();
+    fixture.index = index;
+    fixture.navigate("/shorts/video-" + index);
+    fixture.video(index).currentTime = 0;
+    fixture.video(index).play();
+  };
+  document.querySelector("#unrelated").onclick = () => fixture.unrelated++;
+  document.querySelector("#navigation-button-down button").onclick = () => {
+    fixture.clicks++;
+    if (fixture.mode === "noop") return;
+    if (fixture.mode === "url-first") {
+      fixture.navigate("/shorts/new-url");
+      return;
+    }
+    if (fixture.mode === "reuse") {
+      fixture.navigate("/shorts/reused-" + fixture.clicks);
+      fixture.video(0).currentTime = 0;
+      return;
+    }
+    if (fixture.index < 3) {
+      fixture.select(fixture.index + 1);
+      reels.scrollTop = fixture.index * 500;
+    }
+  };
+  reels.onscroll = () => {
+    const index = Math.round(reels.scrollTop / 500);
+    if (index !== fixture.index) fixture.select(index);
+  };
+</script>

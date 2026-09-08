@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YouTube Shorts Auto Scroll</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <main>
+        <p class="eyebrow">YouTube Shorts</p>
+        <h1>Автоскролл</h1>
+        <p class="description">Следующее видео включается автоматически после окончания текущего.</p>
+        <div class="controls">
+            <span id="state-label">Загрузка...</span>
+            <button id="toggle" type="button" role="switch" aria-checked="false"
+                aria-label="Автоскролл" disabled>Подождите</button>
+        </div>
+        <p id="hint" role="status">Настройка сохраняется для всех вкладок YouTube.</p>
+    </main>
+    <script src="popup.js"></script>
+</body>
+</html>

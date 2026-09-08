@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Shorts Auto Scroll",
+  "version": "1.2.0",
+  "description": "Автопереключение шортсов",
+  "permissions": ["storage"],
+  "action": {
+    "default_title": "YouTube Shorts Auto Scroll",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
