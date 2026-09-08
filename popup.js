@@ -2,7 +2,6 @@
     "use strict";
 
     const toggle = document.querySelector("#toggle");
-    const stateLabel = document.querySelector("#state-label");
     const hint = document.querySelector("#hint");
     let enabled = true;
     let revision = 0;
@@ -11,9 +10,8 @@
     function render(value) {
         enabled = value !== false;
         toggle.setAttribute("aria-checked", String(enabled));
-        toggle.textContent = enabled ? "Выключить" : "Включить";
+        toggle.textContent = enabled ? "Включено" : "Выключено";
         toggle.disabled = saving;
-        stateLabel.textContent = enabled ? "Включено" : "Выключено";
         hint.textContent = enabled
             ? "Работает во всех вкладках YouTube Shorts."
             : "Выключено во всех вкладках. Выбор сохранён.";
@@ -28,7 +26,7 @@
     chrome.storage.local.get({ enabled: true }, (settings) => {
         if (chrome.runtime.lastError) {
             if (revision === 0) {
-                stateLabel.textContent = "Ошибка";
+                toggle.textContent = "Ошибка";
                 hint.textContent = "Не удалось прочитать настройку. Откройте панель заново.";
             }
             return;

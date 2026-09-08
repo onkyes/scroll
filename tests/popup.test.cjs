@@ -35,6 +35,7 @@ test("popup toggles once, persists the choice and restores it when reopened", as
     const popup = open(t, storage);
     storage.resolveReads();
     assert.equal(popup.button.getAttribute("aria-checked"), "true");
+    assert.equal(popup.button.textContent, "Включено");
     popup.button.click();
     popup.button.click();
     assert.equal(popup.button.disabled, true);
@@ -42,6 +43,7 @@ test("popup toggles once, persists the choice and restores it when reopened", as
     assert.equal(storage.writes.length, 1);
     assert.equal(storage.data.enabled, false);
     assert.equal(popup.button.getAttribute("aria-checked"), "false");
+    assert.equal(popup.button.textContent, "Выключено");
     const reopened = open(t, storage);
     storage.resolveReads();
     assert.equal(reopened.button.getAttribute("aria-checked"), "false");
@@ -49,6 +51,7 @@ test("popup toggles once, persists the choice and restores it when reopened", as
     await Promise.resolve();
     assert.equal(storage.data.enabled, true);
     assert.equal(popup.button.getAttribute("aria-checked"), "true");
+    assert.equal(popup.button.textContent, "Включено");
 });
 
 test("failed save leaves the previous state and allows retry", async t => {
