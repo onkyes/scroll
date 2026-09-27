@@ -11,35 +11,14 @@
     let statusHost = null;
     let statusText = null;
     let lastError = "";
-    const extensionStorage = globalThis.chrome?.storage;
-    // Wait for the saved preference before touching a video in an extension context.
-    let enabled = !extensionStorage?.local;
+    let enabled = false;
     let settingsError = false;
 
     function loadSettings() {
-        if (!extensionStorage?.local) return;
-        let revision = 0;
-        const apply = (value) => {
-            enabled = value !== false;
-            settingsError = false;
+        AutoScrollSettings.watch((settings, ready, error) => {
+            enabled = ready && settings.enabled && settings.youtube;
+            settingsError = Boolean(error);
             check();
-        };
-        extensionStorage.onChanged.addListener((changes, area) => {
-            if (area === "local" && changes.enabled) {
-                revision += 1;
-                apply(changes.enabled.newValue);
-            }
-        });
-        extensionStorage.local.get({ enabled: true }, (settings) => {
-            // A newer toggle must not be overwritten by an older, pending read.
-            if (globalThis.chrome.runtime?.lastError) {
-                if (revision === 0) {
-                    settingsError = true;
-                    check();
-                }
-                return;
-            }
-            if (revision === 0) apply(settings.enabled);
         });
     }
 
@@ -56,7 +35,7 @@
         }
         if (!statusHost.isConnected) document.body.append(statusHost);
         statusHost.dataset.state = state;
-        const text = "\u0410\u0432\u0442\u043e\u0441\u043a\u0440\u043e\u043b\u043b 1.2.0: " + message;
+        const text = "\u0410\u0432\u0442\u043e\u0441\u043a\u0440\u043e\u043b\u043b 1.5.0: " + message;
         if (statusText.textContent !== text) statusText.textContent = text;
     }
 

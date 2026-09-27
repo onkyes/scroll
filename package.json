@@ -1,10 +1,10 @@
 {
   "name": "youtube-shorts-auto-scroll",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
-    "test": "node --test tests/state.test.cjs tests/popup.test.cjs",
-    "test:browser": "node --test tests/autoscroll.test.cjs"
+    "test": "node --test tests/state.test.cjs tests/popup.test.cjs tests/social.test.cjs",
+    "test:browser": "node --test tests/autoscroll.test.cjs tests/social-browser.test.cjs"
   },
   "devDependencies": {
     "playwright": "1.58.2",

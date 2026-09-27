@@ -5,7 +5,8 @@ const { resolve } = require("node:path");
 const { JSDOM } = require("jsdom");
 const { createStorage } = require("./storage-mock.cjs");
 
-const source = readFileSync(resolve(__dirname, "../content.js"), "utf8");
+const source = readFileSync(resolve(__dirname, "../settings.js"), "utf8") + "\n" +
+    readFileSync(resolve(__dirname, "../content.js"), "utf8");
 const html = readFileSync(resolve(__dirname, "shorts.html"), "utf8");
 
 function setup(t, path = "/shorts/video-0", storage) {
@@ -251,7 +252,7 @@ test("status distinguishes playback from a user pause", async t => {
     const h = setup(t);
     const host = h.d.querySelector("#yt-shorts-autoscroll-status");
     assert.equal(host.dataset.state, "playing");
-    assert.ok(host.shadowRoot.textContent.includes("1.2.0"));
+    assert.ok(host.shadowRoot.textContent.includes("1.5.0"));
     h.videos[0].paused = true;
     await h.tick();
     assert.equal(host.dataset.state, "paused");
@@ -348,6 +349,33 @@ test("settings read failure is visible and does not start scrolling", async t =>
     await h.end();
     assert.equal(h.state.clicks, 0);
     assert.equal(h.d.querySelector("#yt-shorts-autoscroll-status").dataset.state, "settings-error");
+    storage.failReads = false;
     storage.change(true);
+    storage.resolveReads();
     assert.equal(h.state.clicks, 1);
+});
+
+test("deselecting YouTube stops it even with the global switch on", async t => {
+    const storage = createStorage({ youtube: false, tiktok: true, enabled: true });
+    const h = setup(t, "/shorts/video-0", storage);
+    storage.resolveReads();
+    await h.end();
+    assert.equal(h.state.clicks, 0);
+    assert.equal(h.videos[0].loop, true);
+    storage.update({ youtube: true });
+    assert.equal(h.state.clicks, 1);
+    storage.update({ youtube: false });
+    await h.tick(10000);
+    assert.equal(h.state.clicks, 1);
+    assert.equal(h.state.scrolls, 0);
+});
+
+test("early site event cannot lose a saved global off during startup", async t => {
+    const storage = createStorage({ enabled: false });
+    const h = setup(t, "/shorts/video-0", storage);
+    storage.update({ youtube: true });
+    await h.end();
+    storage.resolveReads();
+    await h.tick();
+    assert.equal(h.state.clicks, 0);
 });

@@ -37,7 +37,8 @@ before(async () => {
     });
     // Branded browsers cannot side-load extensions; this mode tests the content script only.
     if (channel !== "chromium") {
-        await context.addInitScript({ path: resolve(extension, "content.js") });
+        await context.addInitScript({ content: ["settings.js", "content.js"]
+            .map(file => readFileSync(resolve(extension, file), "utf8")).join("\n") });
     }
     // No requests reach YouTube or any other external site.
     await context.route("**/*", route => route.request().isNavigationRequest()

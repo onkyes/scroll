@@ -1,17 +1,22 @@
 {
   "manifest_version": 3,
   "name": "YouTube Shorts Auto Scroll",
-  "version": "1.2.0",
-  "description": "Автопереключение шортсов",
+  "version": "2.0.0",
+  "description": "Автопрокрутка YouTube Shorts, TikTok и Instagram Reels",
   "permissions": ["storage"],
   "action": {
-    "default_title": "YouTube Shorts Auto Scroll",
+    "default_title": "Автоскролл: YouTube, TikTok, Instagram",
     "default_popup": "popup.html"
   },
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
-      "js": ["content.js"],
+      "js": ["settings.js", "content.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://www.tiktok.com/*", "https://www.instagram.com/*"],
+      "js": ["settings.js", "social.js"],
       "run_at": "document_start"
     }
   ]
