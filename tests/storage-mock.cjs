@@ -9,12 +9,18 @@ function createStorage(initial = {}) {
             listeners.forEach(listener => listener(changes, area));
         },
         change(value, area = "local") {
-            const oldValue = data.enabled;
-            if (area === "local") {
-                if (value === undefined) delete data.enabled;
-                else data.enabled = value;
+            mock.update({ enabled: value }, area);
+        },
+        update(values, area = "local") {
+            const changes = {};
+            for (const [key, value] of Object.entries(values)) {
+                changes[key] = { oldValue: data[key], newValue: value };
+                if (area === "local") {
+                    if (value === undefined) delete data[key];
+                    else data[key] = value;
+                }
             }
-            mock.fire({ enabled: { oldValue, newValue: value } }, area);
+            mock.fire(changes, area);
         },
         resolveReads() {
             reads.splice(0).forEach(({ callback, snapshot }) => {
@@ -38,7 +44,7 @@ function createStorage(initial = {}) {
                             runtime.lastError = { message: "Write failed" };
                             try { callback(); } finally { delete runtime.lastError; }
                         } else {
-                            mock.change(values.enabled);
+                            mock.update(values);
                             callback();
                         }
                     });

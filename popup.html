@@ -3,20 +3,41 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>YouTube Shorts Auto Scroll</title>
+    <title>Автоскролл</title>
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
     <main>
-        <p class="eyebrow">YouTube Shorts</p>
+        <div class="topline">
+            <p class="eyebrow">Соцсети</p>
+            <div class="networks" role="group" aria-label="Выберите одну или несколько соцсетей">
+                <button class="network" data-network="youtube" type="button" aria-pressed="false" aria-label="YouTube Shorts" disabled>
+                    <svg class="network-icon youtube-icon" viewBox="0 0 16 12" aria-hidden="true"><rect x="0.5" y="0.5" width="15" height="11" rx="3"/><path class="youtube-play" d="M6.5 3.3v5.4L11 6z"/></svg>
+                    <span>YouTube</span>
+                </button>
+                <button class="network" data-network="tiktok" type="button" aria-pressed="false" aria-label="TikTok" disabled>
+                    <svg class="network-icon tiktok-icon" viewBox="0 0 16 16" aria-hidden="true"><path class="tiktok-cyan" d="M9 1h3c.2 1.8 1.2 3 3 3.4v3c-1.2-.1-2.2-.5-3-1.2v4.6a4 4 0 1 1-4-4h.7v3h-.7a1.1 1.1 0 1 0 1 1.1z"/><path class="tiktok-red" d="M8 1h3c.2 1.8 1.2 3 3 3.4v3c-1.2-.1-2.2-.5-3-1.2v4.6a4 4 0 1 1-4-4h.7v3H7a1.1 1.1 0 1 0 1 1.1z"/></svg>
+                    <span>TikTok</span>
+                </button>
+                <button class="network" data-network="instagram" type="button" aria-pressed="false" aria-label="Instagram Reels" disabled>
+                    <svg class="network-icon instagram-icon" viewBox="0 0 16 16" aria-hidden="true"><defs><linearGradient id="instagram-gradient" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#ffd521"/><stop offset=".42" stop-color="#f56040"/><stop offset=".72" stop-color="#c13584"/><stop offset="1" stop-color="#833ab4"/></linearGradient></defs><rect x="1" y="1" width="14" height="14" rx="4"/><circle cx="8" cy="8" r="3.1"/><circle class="instagram-dot" cx="11.8" cy="4.4" r=".9"/></svg>
+                    <span>Инста</span>
+                </button>
+            </div>
+        </div>
         <h1>Автоскролл</h1>
         <p class="description">Следующее видео включается автоматически после окончания текущего.</p>
         <div class="controls">
             <button id="toggle" type="button" role="switch" aria-checked="false"
                 aria-label="Автоскролл" disabled>Подождите</button>
         </div>
-        <p id="hint" role="status">Настройка сохраняется для всех вкладок YouTube.</p>
+        <p id="hint" role="status">Загрузка настроек...</p>
+        <nav class="footer-links" aria-label="Ссылки автора">
+            <a class="footer-link donation-link" href="https://www.donationalerts.com/c/onkyes" target="_blank" rel="noopener noreferrer" aria-label="Поддержать на DonationAlerts">DA</a>
+            <a class="footer-link telegram-link" href="https://t.me/user74999" target="_blank" rel="noopener noreferrer" aria-label="Написать автору в Telegram">TG</a>
+        </nav>
     </main>
+    <script src="settings.js"></script>
     <script src="popup.js"></script>
 </body>
 </html>

@@ -3,49 +3,55 @@
 
     const toggle = document.querySelector("#toggle");
     const hint = document.querySelector("#hint");
-    let enabled = true;
-    let revision = 0;
+    const networks = [...document.querySelectorAll("[data-network]")];
+    const names = { youtube: "YouTube", tiktok: "TikTok", instagram: "Instagram" };
+    let settings = { ...AutoScrollSettings.defaults };
+    let ready = false;
     let saving = false;
 
-    function render(value) {
-        enabled = value !== false;
-        toggle.setAttribute("aria-checked", String(enabled));
-        toggle.textContent = enabled ? "Включено" : "Выключено";
-        toggle.disabled = saving;
-        hint.textContent = enabled
-            ? "Работает во всех вкладках YouTube Shorts."
-            : "Выключено во всех вкладках. Выбор сохранён.";
+    function render() {
+        const selected = networks.filter(button => settings[button.dataset.network]);
+        for (const button of networks) {
+            button.setAttribute("aria-pressed", String(settings[button.dataset.network]));
+            button.disabled = !ready || saving;
+        }
+        toggle.setAttribute("aria-checked", String(settings.enabled));
+        toggle.textContent = settings.enabled ? "Включено" : "Выключено";
+        toggle.disabled = !ready || saving || (selected.length === 0 && !settings.enabled);
+        hint.textContent = selected.length === 0
+            ? "Выберите соцсеть сверху."
+            : settings.enabled
+                ? "Работает: " + selected.map(button => names[button.dataset.network]).join(", ") + "."
+                : "Выключено во всех вкладках. Выбор сохранён.";
     }
 
-    chrome.storage.onChanged.addListener((changes, area) => {
-        if (area === "local" && changes.enabled) {
-            revision += 1;
-            render(changes.enabled.newValue);
+    const preferences = AutoScrollSettings.watch((value, loaded, error) => {
+        settings = value;
+        ready = loaded;
+        if (ready) render();
+        if (error) {
+            toggle.textContent = "Ошибка";
+            hint.textContent = "Не удалось прочитать настройки. Откройте панель заново.";
         }
-    });
-    chrome.storage.local.get({ enabled: true }, (settings) => {
-        if (chrome.runtime.lastError) {
-            if (revision === 0) {
-                toggle.textContent = "Ошибка";
-                hint.textContent = "Не удалось прочитать настройку. Откройте панель заново.";
-            }
-            return;
-        }
-        if (revision === 0) render(settings.enabled);
     });
 
-    toggle.addEventListener("click", () => {
-        if (saving || toggle.disabled) return;
+    function save(key, value) {
+        if (!ready || saving) return;
         saving = true;
-        toggle.disabled = true;
-        const next = !enabled;
-        const writeRevision = revision;
-        chrome.storage.local.set({ enabled: next }, () => {
-            const error = chrome.runtime.lastError;
+        render();
+        preferences.set(key, value, error => {
             saving = false;
-            // A storage event may arrive before the write callback.
-            render(!error && revision === writeRevision ? next : enabled);
+            render();
             if (error) hint.textContent = "Не удалось сохранить. Нажмите кнопку ещё раз.";
         });
+    }
+
+    toggle.addEventListener("click", () => {
+        if (!toggle.disabled) save("enabled", !settings.enabled);
     });
+    for (const button of networks) {
+        button.addEventListener("click", () => {
+            if (!button.disabled) save(button.dataset.network, !settings[button.dataset.network]);
+        });
+    }
 })();

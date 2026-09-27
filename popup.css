@@ -7,8 +7,10 @@
 
 * { box-sizing: border-box; }
 body { width: 300px; margin: 0; }
-main { padding: 22px 22px 62px; background: radial-gradient(ellipse at top right, #5a292e, transparent 70%); }
-.eyebrow { margin: 0 0 6px; color: #d7a7ac; font-size: 12px; }
+main { padding: 22px 22px 32px; background: radial-gradient(ellipse at top right, #5a292e, transparent 70%); }
+.topline { height: 14px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+.eyebrow { margin: 0; color: #d7a7ac; font-size: 12px; }
+.networks { display: flex; gap: 4px; }
 h1 { margin: 0; font-size: 24px; font-weight: 650; }
 .description { margin: 12px 0 20px; font-size: 13px; line-height: 1.5; color: #dac5c7; }
 .controls { display: flex; align-items: center; justify-content: center; }
@@ -29,4 +31,53 @@ button[aria-checked="true"] { background: #286746; border-color: #66a981; }
 button:hover:not(:disabled) { border-color: #f5eeee; }
 button:focus-visible { outline: 2px solid #f5eeee; outline-offset: 3px; }
 button:disabled { opacity: .55; cursor: wait; }
+.network {
+    min-width: 0;
+    min-height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 3px 6px;
+    border-color: #815358;
+    border-radius: 4px;
+    background: #342124;
+    color: #f5eeee;
+    font-size: 9px;
+    line-height: 16px;
+    font-weight: 600;
+}
+.network[data-network="youtube"] { border-color: #c5223c; }
+.network[data-network="tiktok"] { border-color: #53616a; }
+.network[data-network="instagram"] { border-color: #bc4c75; }
+.network[aria-pressed="true"] { background: #666266; border-color: #aaa4a7; color: #fff; }
+.network-icon { width: 13px; height: 13px; flex: none; }
+.youtube-icon rect { fill: #ff0033; }
+.youtube-icon .youtube-play { fill: #fff; }
+.tiktok-icon .tiktok-cyan { fill: #25f4ee; }
+.tiktok-icon .tiktok-red { fill: #fe2c55; }
+.instagram-icon rect { fill: none; stroke: url(#instagram-gradient); stroke-width: 1.8; }
+.instagram-icon circle:not(.instagram-dot) { fill: none; stroke: #f77765; stroke-width: 1.7; }
+.instagram-icon .instagram-dot { fill: #c13584; }
+#toggle:disabled { cursor: not-allowed; }
 #hint { min-height: 32px; margin: 16px 0 0; font-size: 11px; line-height: 1.5; color: #d7a7ac; }
+.footer-links { display: flex; justify-content: space-between; margin-top: 6px; }
+.footer-link {
+    width: 48px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid currentColor;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    transition: transform 120ms ease, filter 120ms ease;
+}
+.donation-link { background: #f36f37; border-color: #ff986d; }
+.telegram-link { background: #229ed9; border-color: #6fc7ef; }
+.footer-link:hover { filter: brightness(1.12); transform: translateY(-1px); }
+.footer-link:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
